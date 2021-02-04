@@ -1,0 +1,48 @@
+// SCSS variables are information about icon's compiled state, stored under its original file name
+//
+// .icon-home {
+//   width: $icon-home-width;
+// }
+//
+// The large array-like variables contain all information about a single icon
+// $icon-home: x y offset_x offset_y width height total_width total_height image_path;
+//
+// At the bottom of this section, we provide information about the spritesheet itself
+// $spritesheet: width height image $spritesheet-sprites;
+            @mixin icon-btn_1 {
+                background-position: 0  (-90px) ;
+                width: (241px);
+                height: (82px);
+            }
+            @mixin icon-btn_2 {
+                background-position: 0 0;
+                width: (381px);
+                height: (82px);
+            }
+            @mixin icon-choose {
+                background-position:  (-333px)   (-130px) ;
+                width: (32px);
+                height: (33px);
+            }
+            @mixin icon-coin {
+                background-position:  (-249px)   (-90px) ;
+                width: (76px);
+                height: (76px);
+            }
+            @mixin icon-correct {
+                background-position:  (-333px)   (-90px) ;
+                width: (46px);
+                height: (32px);
+            }
+            @mixin icon-error {
+                background-position: 0  (-180px) ;
+                width: (38px);
+                height: (38px);
+            }
+        @mixin sprite-icon {
+            background-image: url(../assets/sprite.png?v=1612430723000);
+            background-repeat: no-repeat;
+            background-size: (381px) (218px);
+        }
+
+
