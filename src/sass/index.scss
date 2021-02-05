@@ -1,6 +1,7 @@
 
 @import "./reset.scss";
 @import "./variables.scss";
+@import "./animate.scss";
 
 html,body{height:100%;}
 body{
@@ -11,22 +12,100 @@ body{
     width: 750px;
     margin: 0 auto;
     min-height: 100%;
+    position: relative;
+    padding: 0 0 200px;
 }
 .page{
     &-home{
-
+        background: #e33a4d;
     }
     &-game{
-        padding: 0 0 120px;
         // position: relative;
         min-height: 100%;
     }
 }
+#bg{
+    margin-top: -2px;
+    background-size: contain;
+}
+.bg{
+    &1{
+        @extend #bg;
+        background-image: url(../assets/bg_1.jpg);
+        height: 260px;
+    }
+    &2{
+        @extend #bg;
+        background-image: url(../assets/bg_2.jpg);
+        height: 260px;
+    }
+    &3{
+        @extend #bg;
+        background-image: url(../assets/bg_3.jpg);
+        height: 392px;
+    }
+}
+.head{
+    position: relative;
+    &-tit{
+        position: absolute;
+        background: url(../assets/tit_1.png) no-repeat;
+        background-size: 100% auto;
+        height: 302px;
+        width: 671px;
+        top:5px;
+        left:50%;
+        margin-left: -335px;
+        -webkit-animation:bounce_move_1 .8s ease-out .3s;
+        animation-fill-mode : both;
+    }
+    &-douwa{
+        position: absolute;
+        background: url(../assets/douwa.png) no-repeat;
+        background-size: 100% auto;
+        height: 346px;
+        width: 302px;
+        top:275px;
+        left:252px;
+        -webkit-animation:bounce_scale_1 .8s ease-out;
+        animation-fill-mode : both;
+        z-index: 9;
+    }
+    &-rule{
+        position: absolute;
+        @include sprite-icon;
+        @include icon-btn_4;
+        top:244px;
+        right: 0;
+    }
+    &-coin{
+        position: absolute;
+        background: url(../assets/coin.png) no-repeat;
+        background-size: 100% auto;
+        height: 405px;
+        width: 716px;
+        top:290px;
+        left:0;
+    }
+}
+.countdown{
+    position: absolute;
+}
+.leaveTimes1{
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: 9;
+}
 .btn{
     &-start{
-        display: inline-block;
         @include sprite-icon;
-        @include icon-coin;
+        @include icon-btn_3;
+        top:608px;
+        left:50%;
+        margin-left: -328px;
+        position: absolute;
+        -webkit-animation:shake_1 .2s .7s;
     }
     &-confirm,
     &-next,
@@ -48,7 +127,15 @@ body{
         @include icon-btn_2;
     }
 }
-
+.wave{
+    width: 100%;
+    height: 144px;
+    position: absolute;
+    left:0;
+    bottom:0;
+    background: url(../assets/deco_1.png) 0 top no-repeat;
+    background-size: 100% auto;
+}
 .game{
     &-bottom{
         padding-top: 42px;
@@ -56,15 +143,6 @@ body{
         a{
             margin: 0 15px;
         }
-    }
-    &-wave{
-        width: 100%;
-        height: 144px;
-        position: absolute;
-        left:0;
-        bottom:0;
-        background: url(../assets/deco_1.png) 0 top no-repeat;
-        background-size: 100% auto;
     }
 }
 .frame{
@@ -196,33 +274,100 @@ body{
 
 
 .rank{
-    &-me{
-
+    position: relative;
+    z-index: 2;
+    width: 710px;
+    margin: -100px auto 0;
+    &-top{
+        background: url(../assets/frm_4.png) 0 top no-repeat;
+        height: 209px;
+        background-size: 100% auto;
+        overflow: hidden;
     }
-    &-list{
-        height: 150px;
-        width: 300px;
+    &-mid{
+        background: url(../assets/frm_5.png) 0 top repeat-y;
+        background-size: 100% auto;
+        margin-top: -2px;
+        padding: 20px 27px;
+    }
+    &-btm{
+        background: url(../assets/frm_6.png) 0 top no-repeat;
+        height: 55px;
+        background-size:100% auto;
+    }
+    .item{
+        &-rank{
+            width: 154px;
+            position: relative;
+        }
+        &-name{
+            width: 380px;
+        }
+        &-score{
+            width: 100px;
+        }
+    }
+    &-me{
+        padding: 110px 27px 0;
+        line-height: 100px;
+        color: #f14c53;
+        font-size: 34px;
+        span{
+            float: left;
+        }
+        i{
+            width: 56px;
+            height: 56px;
+            line-height: 56px;
+            color: #ffe1b4;
+            font-size: 28px;
+            text-align: center;
+            border-radius: 28px;
+            position: absolute;
+            top:18px;
+            left:49px;
+            font-style: normal;
+            background: #f14c53;
+        }
+    }
+    &-list{  
+        height: 500px;
         overflow: hidden;
         position: relative;
     }
     li{
-        height: 30px;
+        height: 90px;
         span{
             float: left;
-            line-height: 30px;
+            height: 90px;
+            font-size: 28px;
+            color: #4f4f4f;
+            line-height: 90px;
         }
-    }
-    .item{
-        &-rank{
+        i{
+            @include sprite-icon;
+            position: absolute;
+            top:15px;
+            left:53px;
+            font-size: 0;
+        }
+        .item{
+            &-rank{
+                text-align: center;
+                &-1 i{
+                    @include icon-medal_1;
+                }
+                &-2 i{
+                    @include icon-medal_2;
+                }
+                &-3 i{
+                    @include icon-medal_3;
+                }
+            }
             
         }
-        &-name{
-
-        }
-        &-score{
-
-        }
     }
+    
 }
 
 .popup{

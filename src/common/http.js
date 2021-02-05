@@ -50,11 +50,12 @@ const checkCode = result => {
 export const post = (url,params = {},withoutToken = false) => {
   console.log(url,"params:",params);
   let p;
+  
   let token = getSessionStorage('spToken');
-  //let token = "azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09";
-  if(!withoutToken && !token){
-    setAuth();
-  }
+  
+  // if(!withoutToken && !token){
+  //   setAuth();
+  // }
   if(isMock){
     p = new Promise((resolve, reject) => {
       resolve(useMock(url))

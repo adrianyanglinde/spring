@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>欢乐答题</title>
     <script>
         (function(doc, win) {
             const docEl = doc.documentElement;
@@ -23,12 +23,28 @@
 <body>
     <div class="view">
         <div class="page-home">
-            <a href="javascript:;" class="btn-start">开始答题</a>
+            <div class="head">
+                <div class="bg1"></div>
+                <div class="bg2"></div>
+                <div class="bg3"></div>
+                <div class="head-tit"></div>
+                <div class="head-douwa"></div>
+                <div class="head-rule"></div>
+                <div class="head-coin"></div>
+                <a href="javascript:;" class="btn-start"></a>
+                <div class="countdown" data-start="" data-end=""></div>
+                <div class="leaveTimes1">剩余次数<span class="leaveTimes">0</span></div>
+            </div>
             <div class="rank">
-                <div class="rank-me"></div>
-                <div class="rank-list">
-                    <ul><li class="rank-loading">数据加载中...</li></ul>
+                <div class="rank-top">
+                    <div class="rank-me"></div>
                 </div>
+                <div class="rank-mid">
+                    <div class="rank-list">
+                        <ul><li class="rank-loading">数据加载中...</li></ul>
+                    </div>
+                </div>
+                <div class="rank-btm"></div>
             </div>
         </div>
         <div class="page-game" style="display: none;">
@@ -40,8 +56,8 @@
                 </div>
             </div>
             <div class="game-bottom"></div>
-            <div class="game-wave"></div>
         </div>
+        <div class="wave"></div>
         <div class="popup-wrap" id="j-popup"></div>
     </div>
     

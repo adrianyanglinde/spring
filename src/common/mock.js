@@ -49,7 +49,7 @@ const mock = (url) => {
               "choice" : "远程控制软件"
             }
         ],
-        "next":0,
+        "next":1,
         "record_id": "6"
       },
       "code": 1000,
@@ -60,7 +60,7 @@ const mock = (url) => {
     return {
       "info": {
           "isRight": 0,
-          "rightAnswer": "1;13"
+          "rightAnswer": "13"
       },
       "code": 1000,
       "msg": "操作成功"

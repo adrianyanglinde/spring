@@ -7,7 +7,9 @@ import {
   API
 } from '../src/common/http';
 import {
-  toast
+  toast, 
+  setSessionStorage,
+  getSessionStorage
 } from '../src/common/utils';
 import {
   setAuth
@@ -40,7 +42,6 @@ let hasNext = 0;  //是否有下一题
 let preId = 0;    //当前题目id
 let finalId = 0;  //最终提交答案id
 let lock = false;  //是否在间隔时间内
-let leave_times = 0; //剩余答题次数
 
 const renderRank = data => {
   
@@ -48,9 +49,11 @@ const renderRank = data => {
   if(data.length <= 0){
     html = `<li class="rank-empty">列表为空</li>`;
   }else{
-    html = data.map(item => `
+    html = data.map((item,index) => `
     <li>
-      <span class="item-rank">${item.rank}</span>
+      <span class="item-rank item-rank-${index+1}">
+        ${index <= 2 ? `<i>${item.rank}</i>` : item.rank}
+      </span>
       <span class="item-name">${item.username}</span>
       <span class="item-score">${item.scores}分</span>
     </li>`).join("");
@@ -58,13 +61,16 @@ const renderRank = data => {
   $(".rank-list ul").html(html);
 }
 
-const renderRankMe = data => {
+const renderPage = data => {
   let html = `
-    <span class="item-rank">${data.rank}</span>
-    <span class="item-name">${data.username}</span>
-    <span class="item-score">${data.scores}分</span>
+    <span class="item-rank"><i>${data.userInfo.rank}</i></span>
+    <span class="item-name">${data.userInfo.username}</span>
+    <span class="item-score">${data.userInfo.scores}分</span>
   `;
   $(".rank-me").html(html);
+  $(".leaveTimes").html(data.userInfo.leave_times);
+  $(".countdown").data("start",data.config.start);
+  $(".countdown").data("end",data.config.end);
 }
 
 const renderQuestion = data => {
@@ -111,7 +117,7 @@ const renderQuestion = data => {
   const btns = `
     <a href="javascript:;" class="btn-back j-back">结束答题</a>
     <a href="javascript:;" class="btn-confirm j-confirm">确定</a>
-    ${data.next == 0 ? 
+    ${data.next == 1 ? 
       `<a href="javascript:;" class="btn-next j-next" style="display:none;">下一题</a>`
       : 
       `<a href="javascript:;" class="btn-submit j-submit" style="display:none;">提交</a>`}
@@ -126,9 +132,10 @@ const popup = data => {
   
   const temp = `
   <div class="popup-main">
-    <div class="popup-close j-close">关闭</div>
+    <div class="popup-close j-close">返回首页</div>
     <div class="">分数：${data.scores}</div>
     <div class="">时间：${data.total_time}</div>
+    <div class="">剩余次数：${data.leaveTimes}</div>
     ${data.got_egg == 1 ? `<div class="">这里有个彩蛋</div>` : ``}
   </div>
   <div class="popup-mask"></div>
@@ -147,46 +154,83 @@ const getQuestion = () => {
   })
 }
 
-
+/**入口 */
 const enter = () => {
-  // let token = getSessionStorage("spToken");
-  // let isBind = getSessionStorage("spIsBind");
-  // if(token && isBind){
-  //   init();
-  // }else{
+  // setTimeout(()=>{
+  //   $(".head-douwa").addClass("bounce_1");
+  // },1000)
+  setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
+  setSessionStorage('spIsBind',"1");
+  let token = getSessionStorage("spToken");
+  let isBind = getSessionStorage("spIsBind");
+  if(token && isBind){
+    init();
+  }else{
     setAuth().then(()=>{init();});
-  //}
+    //init();
+  }
+}
+
+
+let bsscroll = null;
+const getPageData = () => {
+  post(API.GET_PAGE_INFO)
+  .then(result=>renderPage(result.info))
+  
+  post(API.GET_RANK_LIST)
+  .then(result=>renderRank(result.info))
+  .then(()=>{
+    
+    if($(".rank-list li").length > 0){
+      if(bsscroll){
+        bsscroll.refresh();
+      }else{
+        bsscroll = new Bscroll(".rank-list", {
+          startY: 0,
+          click: true,
+          scrollX: false,
+          // 忽略竖直方向的滚动
+          scrollY: true,
+          scrollbar: {
+            fade: false,
+            interactive: false // 1.8.0 新增
+          },
+          eventPassthrough: "horizontal"
+        })
+      }
+    }
+  })
+}
+
+const goBack = () => {
+  finalId = 0;
+  lock = false;
+  hasNext = 0;
+  preId = 0; 
+  $(".page-home").show()
+  $(".page-game").hide()
+  getPageData();
+}
+
+const submit = () => {
+  post(API.LAST_SUBMIT,{id:finalId})
+  .then(result=>{
+    let leaveTimes = +$(".leaveTimes").html();
+    console.log(leaveTimes);
+    leaveTimes-=1;
+    $(".leaveTimes").html(leaveTimes);
+    result.info.leaveTimes = leaveTimes;
+    popup(result.info);
+  });
 }
 
 /**初始化 */
 const init = () => {
   
-  post(API.GET_PAGE_INFO)
-  .then(result=>{
-    leave_times = +result.info.userInfo.leave_times;
-    renderRankMe(result.info.userInfo);
-  })
-  
-  post(API.GET_RANK_LIST)
-  .then(result=>renderRank(result.info))
-  .then(()=>{
-    if($(".rank-list li").length > 0){
-      new Bscroll(".rank-list", {
-        startY: 0,
-        click: true,
-        scrollX: false,
-        // 忽略竖直方向的滚动
-        scrollY: true,
-        scrollbar: {
-          fade: false,
-          interactive: false // 1.8.0 新增
-        },
-        eventPassthrough: "horizontal"
-      })
-    }
-  })
+  getPageData();
   
   $(document).on("click",'.btn-start',function(){
+    let leave_times = +$(".leaveTimes span").html();
     if(leave_times <= 0){
       toast("您已经没有次数了哦~");
       return
@@ -204,34 +248,15 @@ const init = () => {
     audios.next.play();
     getQuestion();
   })
-  // $(".btn-start").click();
   $(document).on("click",'.j-submit',function(){
-    post(API.LAST_SUBMIT,{id:finalId})
-    .then(result=>{
-      finalId = 0;
-      lock = false;
-      hasNext = 0;
-      preId = 0;
-      popup(result.info);
-    });
+    submit();
   })
   $(document).on("click",'.j-close',function(){
     $("#j-popup").html("").hide();
-    finalId = 0;
-    lock = false;
-    hasNext = 0;
-    preId = 0; 
-    $(".page-home").show()
-    $(".page-game").hide()
+    goBack();
   })
   $(document).on("click",'.j-back',function(){
-    post(API.LAST_SUBMIT,{id:finalId});
-    finalId = 0;
-    lock = false;
-    hasNext = 0;
-    preId = 0; 
-    $(".page-home").show()
-    $(".page-game").hide()
+    submit();
   })
   $(document).on("click",'.question-options .item',function(){
     if(lock){
@@ -253,8 +278,6 @@ const init = () => {
       }
     }
   })
-
-  
   $(document).on("click",'.j-confirm',function(){
     let $question = $(".question");
     let type = $question.data("type");
@@ -330,6 +353,10 @@ const init = () => {
           })
         }
       }
+    })
+    .catch(error=>{
+      //JSON.stringify(error);
+      toast(JSON.stringify(error));
     })
   })
 }
