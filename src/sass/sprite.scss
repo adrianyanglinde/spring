@@ -69,6 +69,11 @@
                 width: (38px);
                 height: (25px);
             }
+            @mixin icon-dot_2 {
+                background-position:  (-638px)   (-226px) ;
+                width: (16px);
+                height: (16px);
+            }
             @mixin icon-error {
                 background-position: 0  (-602px) ;
                 width: (38px);
@@ -90,7 +95,7 @@
                 height: (64px);
             }
         @mixin sprite-icon {
-            background-image: url(../assets/sprite.png?v=1612661028000);
+            background-image: url(../assets/sprite.png?v=1612706605000);
             background-repeat: no-repeat;
             background-size: (656px) (640px);
         }

@@ -136,6 +136,11 @@ body{
         left:50%;
         margin-left: -160px;
     }
+    &-again{
+        @include sprite-icon;
+        @include icon-btn_5_3;
+        display: inline-block;
+    }
 }
 .wave{
     width: 100%;
@@ -472,6 +477,77 @@ body{
         margin: -369px 0 0 -221.5px;
         padding-top: 360px;
     }
+    &-close{
+        @include sprite-icon;
+        @include icon-close;
+        position: absolute;
+        top:54px;
+        right:70px;
+        z-index: 9;
+    }
+    &-top{
+        background: url(../assets/dialog_top.png) 0 top no-repeat;
+        background-size: 100% auto;
+        height: 80px;
+        position: relative;
+        z-index: 2;
+    }
+    &-btm{
+        background: url(../assets/dialog_btm.png) 0 bottom no-repeat;
+        background-size: 100% auto;
+        height: 155px;
+        margin-top: -2px;
+    }
+    &-mid{
+        background: url(../assets/dialog_mid.png) repeat-y;
+        background-size: 100% auto;
+        margin-top: -20px;
+        position: relative;
+        z-index: 2;
+    }
+    &-douwa{
+        position: absolute;
+        z-index: 1;
+    }
+
+
+    &-result{
+        width: 570px;
+        left:50%;
+        top:50%;
+        margin-left: -285px;
+        margin-top: -266px;
+        .dialog-douwa{
+            width: 570px;
+            height: 239px;
+            background: url(../assets/dialog_deco_1.png) 0 top no-repeat;
+            background-size: 100% auto;
+            position: absolute;
+            top: -185px;
+            left:0;
+        }
+        .dialog-close{
+            top:-70px;
+            right: -20px;
+        }
+    }
+    &-egg{
+        width: 570px;
+        left:50%;
+        top:50%;
+        margin-left: -285px;
+        margin-top: -266px;
+        .dialog-douwa{
+            width: 570px;
+            height: 239px;
+            background: url(../assets/dialog_deco_1.png) 0 top no-repeat;
+            background-size: 100% auto;
+            position: absolute;
+            top: -185px;
+            left:0;
+        }
+    }
+
     .active{
         &-txt{
             height: 180px;
@@ -504,5 +580,120 @@ body{
         color: #d73e48;
         font-weight: bold;
     }
-    
+
+    &-rule{
+        width: 750px;
+        margin: -515px 0 0 -375px;
+    }
+    .rule{
+        &-top{
+            background: url(../assets/dialog_5_top.png) 0 top no-repeat;
+            background-size: 100% auto;
+            height: 207px;
+        }
+        &-mid{
+            background: url(../assets/dialog_5_mid.png) 0 top repeat-y;
+            background-size: 100% auto;
+        }
+        &-btm{
+            background: url(../assets/dialog_5_btm.png) 0 bottom no-repeat;
+            background-size: 100% auto;
+            height: 135px;
+        }
+        &-cont{
+            color: #d73e48;
+        }
+        &-wrap{
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 75px 0 105px;
+        }
+        &-title{
+            font-size: 42px;
+            line-height: 114px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 1px dashed #efa17d;
+            margin: 0 105px 20px;
+        }
+        &-list{
+            padding-right: 30px;
+            li{
+                padding-left: 42px;
+                line-height: 54px;
+                font-size: 28px;
+                position: relative;
+                i{
+                    @include sprite-icon;
+                    @include icon-dot_2;
+                    position: absolute;
+                    left:0;
+                    top:19px;
+                }
+            }
+            span{
+                color: #1aabb8;
+            }
+        }
+    }
+}
+
+
+.write{
+    &-cont{
+        text-align: center;
+        padding: 0 77px;
+    }
+    &-title{
+        color: #ffd776;
+        line-height: 82px;
+        font-size: 56px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    &-txt{
+        color: #fff;
+        line-height: 82px;
+        font-size: 56px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+}
+
+.result{
+    &-cont{
+        padding: 0 78px;
+        text-align: center;
+    }
+    &-top{
+        
+    }
+    &-rank-txt{
+        color: #fff;
+        line-height: 50px;
+        font-size: 28px;
+    }
+    &-rank{
+        color: #ffd776;
+        line-height: 86px;
+        font-size: 72px;
+        font-weight: bold;
+    }
+    &-tip{
+        color: #fea179;
+        line-height: 56px;
+        font-size: 22px;
+        font-weight: bold;
+        border-bottom: 1px dashed #fea179;
+    }
+    &-mid{
+        color: #fff;
+        line-height: 56px;
+        font-size: 30px;
+        padding: 20px 0 30px;
+        span{
+            color: #ffd776;
+        }
+    }
 }

@@ -68,7 +68,8 @@ const renderPage = data => {
     <span class="item-score">${data.gameInfo.scores}分</span>
   `;
   $(".rank-me").html(html);
-  $(".leaveTimes").html(data.userInfo.leave_times);
+  $(".leaveTimes").html(data.gameInfo.leaveTimes);
+  $(".isOver").html(data.config.isOver);
 }
 
 const renderQuestion = data => {
@@ -126,25 +127,43 @@ const renderQuestion = data => {
 
 }
 
-const popup = data => {
-  
-  const temp = `
-  <div class="popup-main">
-    <div class="popup-close j-close">返回首页</div>
-    <div class="">分数：${data.scores}</div>
-    <div class="">时间：${data.total_time}</div>
-    <div class="">剩余次数：${data.leaveTimes}</div>
-    ${data.got_egg == 1 ? `<div class="">这里有个彩蛋</div>` : ``}
-  </div>
-  <div class="popup-mask"></div>
-  `;
-  $("#j-popup").html(temp).show();
-}
 
 const contentTemp = (id,data) => {
   const temp = {
     'result' : (data)=>`
-
+      <div class="dialog-close j-close" data-id="${id}"></div>
+      <div class="dialog-douwa"></div>
+      <div class="dialog-top"></div>
+      <div class="dialog-mid">
+        <div class="result-cont">
+          <div class="result-top">
+            <div class="result-rank-txt">当前排名</div>
+            <div class="result-rank">${data.rank}</div>
+            <div class="result-tip">最终排名请关注首页英雄榜</div>
+          </div>
+          <div class="result-mid">
+            <p>答对${data.scores}题</p>
+            <p>耗时${data.total_time}</p>
+            <p>剩余<span>${data.leaveTimes}</span>次挑战机会</p>
+          </div>
+          <a href="javascript:;" class="btn-again j-again"></a>
+        </div>
+      </div>
+      <div class="dialog-btm"></div>
+    `,
+    'egg' : (data)=>`
+      <div class="dialog-douwa"></div>
+      <div class="dialog-top"></div>
+      <div class="dialog-mid">
+        <div class="write-cont">
+          <div class="write-title">锦鲤彩蛋</div>
+          <div class="write-txt">第43个提交答卷<br>获得99元现金奖励</div>
+          <div class="write-input"><input type="text" placeholder="请输入支付宝账号"/></div>
+          <div class="write-tip">账号仅供奖金发放使用，提交后不可更改</div>
+          <a href="javascript:;" class="btn-receive j-again"></a>
+        </div>
+      </div>
+      <div class="dialog-btm"></div>
     `,
     'active' : (data)=>`
       <div class="active-txt">
@@ -156,18 +175,30 @@ const contentTemp = (id,data) => {
       <a href="javascript:;" class="btn-rule2 j-rule"></a>
     `,
     'rule' : (data)=>`
-      <div class="dialog-close j-close" data-id="${id}">00:00:00</div>
+      <div class="dialog-close j-close" data-id="${id}"></div>
       <div class="rule-top"></div>
       <div class="rule-mid">
-        <div class="rule-title">活动规则</div>
-        <ul class="rule-list">
-          <li>活动时间：09：00-21：00</li>
-          <li>每次共50题，每题<span>1分</span>，满分50分</li>
-          <li>活动当天每人共有<span>3次</span>答题机会，取最高分计分（最高不超过50分）</li>
-          <li>答题中途可选择结束答题，已答分数仍然有效</li>
-          <li>活动期间，设置实时“英雄榜”对分数进行排名，若分数相同，则按答题用时顺序排名</li>
-          <li>活动截止后，再次点击链接进入活动，如已上榜会自动弹出需填写支付宝账号的界面，于正月<span>初八</span>统一发放奖励</li>
-        </ul>
+        <div class="rule-cont">
+          <div class="rule-title">活动规则</div>
+          <div class="rule-wrap">
+            <ul class="rule-list">
+              <li><i></i>活动时间：09：00-21：00</li>
+              <li><i></i>每次共50题，每题<span>1分</span>，满分50分</li>
+              <li><i></i>活动当天每人共有<span>3次</span>答题机会，取最高分计分（最高不超过50分）</li>
+              <li><i></i>答题中途可选择结束答题，已答分数仍然有效</li>
+              <li><i></i>活动期间，设置实时“英雄榜”对分数进行排名，若分数相同，则按答题用时顺序排名</li>
+              <li><i></i>活动截止后，再次点击链接进入活动，如已上榜会自动弹出需填写支付宝账号的界面，于正月<span>初八</span>统一发放奖励</li>
+              <li><i></i>奖金设置：<br>
+                  第1-3名              奖金188元<br>
+                  第4-10名            奖金128元<br>
+                  第11-30名           奖金 88元<br>
+                  第31-100名         奖金 18元<br>
+                  第101-200名       奖金  8 元<br>
+              </li>
+            
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="rule-btm"></div>
     `
@@ -175,13 +206,18 @@ const contentTemp = (id,data) => {
   return temp[id](data);
 }
 const showDialog = (id,data,cb=function(){}) => {
+ 
   const temp = `
   <div class="dialog dialog-${id}">
     ${contentTemp(id,data)}
   </div>
   <div class="dialog-mask"></div>
   `;
+
   $(`#j-dialog-${id}`).html(temp).show();
+  setTimeout(()=>{
+    $(`#j-dialog-${id}`).show();
+  },0)
   $(`body`)[0].className = "hidden";
   cb();
 }
@@ -240,12 +276,15 @@ const countDown = (now,end) => {
     setTimeout(()=>{
       countDown(now,end);
     },1000);                     
-  }  
-
+  }else{
+    $(".isOver").html(0);
+    hideDialog("count");
+    getRankList();
+  }
 }  
 
 
-let bsscroll = null;
+
 const getPageData = () => {
   post(API.GET_PAGE_INFO)
   .then(result=>{
@@ -261,7 +300,6 @@ const getPageData = () => {
     }else if(config.isOver==1){
       getRankList();
     }else{}
-    //renderPage(result.info)
   })
 }
 
@@ -269,24 +307,7 @@ const getRankList = () => {
   post(API.GET_RANK_LIST)
   .then(result=>renderRank(result.info))
   .then(()=>{
-    if($(".rank-list li").length > 0){
-      if(bsscroll){
-        bsscroll.refresh();
-      }else{
-        bsscroll = new Bscroll(".rank-list", {
-          startY: 0,
-          click: true,
-          scrollX: false,
-          // 忽略竖直方向的滚动
-          scrollY: true,
-          scrollbar: {
-            fade: false,
-            interactive: false // 1.8.0 新增
-          },
-          eventPassthrough: "horizontal"
-        })
-      }
-    }
+    
   })
 }
 
@@ -304,11 +325,10 @@ const submit = () => {
   post(API.LAST_SUBMIT,{id:finalId})
   .then(result=>{
     let leaveTimes = +$(".leaveTimes").html();
-    console.log(leaveTimes);
     leaveTimes-=1;
     $(".leaveTimes").html(leaveTimes);
     result.info.leaveTimes = leaveTimes;
-    popup(result.info);
+    showDialog("result",result.info);
   });
 }
 
@@ -316,10 +336,11 @@ const submit = () => {
 const init = () => {
   
   getPageData();
+  showDialog("egg",{});
   
   $(document).on("click",'.btn-start',function(){
-    let leave_times = +$(".leaveTimes span").html();
-    if(leave_times <= 0){
+    let leaveTimes = +$(".leaveTimes").html();
+    if(leaveTimes <= 0){
       toast("您已经没有次数了哦~");
       return
     }
@@ -339,8 +360,8 @@ const init = () => {
   $(document).on("click",'.j-submit',function(){
     submit();
   })
-  $(document).on("click",'.j-close',function(){
-    $("#j-popup").html("").hide();
+  $(document).on("click",'.j-again',function(){
+    hideDialog("result")
     goBack();
   })
   $(document).on("click",'.j-back',function(){
@@ -449,10 +470,39 @@ const init = () => {
   })
   $(document).on("click",'.j-close',function(){
     hideDialog($(this).data("id"));
+    let isOver = $(".isOver").html();
+    if(isOver==-1){
+      $("#j-dialog-count").show();
+    }
   })
   $(document).on("click",'.j-rule',function(){
-    showDialog("rule",{});
+    showDialog("rule",{},initRuleScroll);
+    let isOver = $(".isOver").html();
+    if(isOver==-1){
+      $("#j-dialog-count").hide();
+    }
   })
+  
+}
+
+
+const initRuleScroll = () => {
+  // if(bsscroll){
+  //   bsscroll.refresh();
+  // }else{
+    new Bscroll(".rule-wrap", {
+      startY: 0,
+      click: true,
+      scrollX: false,
+      // 忽略竖直方向的滚动
+      scrollY: true,
+      scrollbar: {
+        fade: false,
+        interactive: false // 1.8.0 新增
+      },
+      eventPassthrough: "horizontal"
+    })
+  //}
 }
 
 $(document).ready(function () {

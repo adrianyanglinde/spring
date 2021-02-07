@@ -69,6 +69,7 @@ const mock = (url) => {
   if (new RegExp(API.LAST_SUBMIT).test(url)) {
     return {
       "info": {
+          "rank": 100,
           "scores": 1,
           "total_time": "0h10m0s",
           "got_egg": 1
@@ -92,9 +93,9 @@ const mock = (url) => {
           "config": {
               "start": 1613145600,  
               "end": 1612748100,
-              "curTime" : 1612683237,
+              "curTime" : 1613145580,
               "session_id": 1,
-              "isOver": 0  //-2-未开始大于1天；-1-未开始小于1天；0-进行中；1-已结束
+              "isOver": 0 //-2-未开始大于1天；-1-未开始小于1天；0-进行中；1-已结束
           },
           "gameInfo": {
               "scores": 0,
