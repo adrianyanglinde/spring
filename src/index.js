@@ -63,14 +63,12 @@ const renderRank = data => {
 
 const renderPage = data => {
   let html = `
-    <span class="item-rank"><i>${data.userInfo.rank}</i></span>
+    <span class="item-rank"><i>${data.gameInfo.rank}</i></span>
     <span class="item-name">${data.userInfo.username}</span>
-    <span class="item-score">${data.userInfo.scores}分</span>
+    <span class="item-score">${data.gameInfo.scores}分</span>
   `;
   $(".rank-me").html(html);
   $(".leaveTimes").html(data.userInfo.leave_times);
-  $(".countdown").data("start",data.config.start);
-  $(".countdown").data("end",data.config.end);
 }
 
 const renderQuestion = data => {
@@ -143,6 +141,57 @@ const popup = data => {
   $("#j-popup").html(temp).show();
 }
 
+const contentTemp = (id,data) => {
+  const temp = {
+    'result' : (data)=>`
+
+    `,
+    'active' : (data)=>`
+      <div class="active-txt">
+        ${data.text}
+      </div>
+    `,
+    'count' : (data)=>`
+      <div class="count j-countdown">00:00:00</div>
+      <a href="javascript:;" class="btn-rule2 j-rule"></a>
+    `,
+    'rule' : (data)=>`
+      <div class="dialog-close j-close" data-id="${id}">00:00:00</div>
+      <div class="rule-top"></div>
+      <div class="rule-mid">
+        <div class="rule-title">活动规则</div>
+        <ul class="rule-list">
+          <li>活动时间：09：00-21：00</li>
+          <li>每次共50题，每题<span>1分</span>，满分50分</li>
+          <li>活动当天每人共有<span>3次</span>答题机会，取最高分计分（最高不超过50分）</li>
+          <li>答题中途可选择结束答题，已答分数仍然有效</li>
+          <li>活动期间，设置实时“英雄榜”对分数进行排名，若分数相同，则按答题用时顺序排名</li>
+          <li>活动截止后，再次点击链接进入活动，如已上榜会自动弹出需填写支付宝账号的界面，于正月<span>初八</span>统一发放奖励</li>
+        </ul>
+      </div>
+      <div class="rule-btm"></div>
+    `
+  }
+  return temp[id](data);
+}
+const showDialog = (id,data,cb=function(){}) => {
+  const temp = `
+  <div class="dialog dialog-${id}">
+    ${contentTemp(id,data)}
+  </div>
+  <div class="dialog-mask"></div>
+  `;
+  $(`#j-dialog-${id}`).html(temp).show();
+  $(`body`)[0].className = "hidden";
+  cb();
+}
+const hideDialog = (id) => {
+  $(`#j-dialog-${id}`).html("").hide();
+  $(`body`)[0].className = "";
+}
+
+
+
 /**获取题目 */
 const getQuestion = () => {
   post(API.GET_QUESTION,{preId:+preId})
@@ -171,16 +220,55 @@ const enter = () => {
   }
 }
 
+const countDown = (now,end) => {  
+  let leftTime = end - now; 
+  let d,h,m,s;  
+  let addZero = (i) => {
+    return i < 10 ? "0" + i: i + "";
+  }
+  if (leftTime>=0) {  
+    d = Math.floor(leftTime/60/60/24);  
+    h = Math.floor(leftTime/60/60%24);  
+    m = Math.floor(leftTime/60%60);  
+    s = Math.floor(leftTime%60); 
+    d = addZero(d)
+    h = addZero(h);
+    m = addZero(m);
+    s = addZero(s); 
+    $(".j-countdown").html(`${h}:${m}:${s}`);
+    now+=1;
+    setTimeout(()=>{
+      countDown(now,end);
+    },1000);                     
+  }  
+
+}  
+
 
 let bsscroll = null;
 const getPageData = () => {
   post(API.GET_PAGE_INFO)
-  .then(result=>renderPage(result.info))
-  
+  .then(result=>{
+    renderPage(result.info);
+    let {config} = result.info;
+    if(config.isOver==-2){
+      showDialog("active",{text:"活动暂未开启<br>敬请期待"});
+    }else if(config.isOver==-1){
+      showDialog("count",{});
+      countDown(config.curTime,config.start);
+    }else if(config.isOver==0){
+      getRankList();
+    }else if(config.isOver==1){
+      getRankList();
+    }else{}
+    //renderPage(result.info)
+  })
+}
+
+const getRankList = () => {
   post(API.GET_RANK_LIST)
   .then(result=>renderRank(result.info))
   .then(()=>{
-    
     if($(".rank-list li").length > 0){
       if(bsscroll){
         bsscroll.refresh();
@@ -359,9 +447,16 @@ const init = () => {
       toast(JSON.stringify(error));
     })
   })
+  $(document).on("click",'.j-close',function(){
+    hideDialog($(this).data("id"));
+  })
+  $(document).on("click",'.j-rule',function(){
+    showDialog("rule",{});
+  })
 }
 
 $(document).ready(function () {
   enter();
+
 });
 

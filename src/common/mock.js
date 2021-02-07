@@ -84,16 +84,22 @@ const mock = (url) => {
   if (new RegExp(API.GET_PAGE_INFO).test(url)) {
     return {
       "info": {
-          "config": {
-              "start": "2021-02-01 12:00",
-              "end": "2021-02-05 12:00",
-              "session_id": "1"
-          },
           "userInfo": {
-              "username": "秦文芳",
-              "scores": 1,
-              "rank": 1,
-              "leave_times": 2
+              "username": "叶碧林",
+              "email": "yebilin@4399inc.com",
+              "empno": "3674"
+          },
+          "config": {
+              "start": 1613145600,  
+              "end": 1612748100,
+              "curTime" : 1612683237,
+              "session_id": 1,
+              "isOver": 0  //-2-未开始大于1天；-1-未开始小于1天；0-进行中；1-已结束
+          },
+          "gameInfo": {
+              "scores": 0,
+              "rank": 0,
+              "leaveTimes": 3
           }
       },
       "code": 1000,
