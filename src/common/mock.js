@@ -107,7 +107,7 @@ const mock = (url) => {
           "gameInfo": {
               "scores": 200,
               "rank": 2,
-              "leaveTimes": 3
+              "leaveTimes": 2
           }
       },
       "code": 1000,

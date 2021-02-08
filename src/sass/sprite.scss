@@ -10,99 +10,109 @@
 // At the bottom of this section, we provide information about the spritesheet itself
 // $spritesheet: width height image $spritesheet-sprites;
             @mixin icon-btn_1 {
-                background-position:  (-389px)   (-226px) ;
+                background-position:  (-1053px)   (-226px) ;
                 width: (241px);
                 height: (82px);
             }
             @mixin icon-btn_2 {
-                background-position: 0  (-226px) ;
+                background-position:  (-664px)   (-226px) ;
                 width: (381px);
                 height: (82px);
             }
-            @mixin icon-btn_3 {
+            @mixin icon-btn_3_1 {
                 background-position: 0 0;
                 width: (656px);
                 height: (218px);
             }
+            @mixin icon-btn_3_2 {
+                background-position: 0  (-226px) ;
+                width: (656px);
+                height: (218px);
+            }
+            @mixin icon-btn_3_3 {
+                background-position:  (-664px)  0;
+                width: (656px);
+                height: (218px);
+            }
             @mixin icon-btn_4 {
-                background-position: 0  (-494px) ;
+                background-position: 0  (-541px) ;
                 width: (46px);
                 height: (100px);
             }
             @mixin icon-btn_5_1 {
-                background-position:  (-332px)   (-316px) ;
+                background-position:  (-996px)   (-316px) ;
                 width: (321px);
                 height: (81px);
             }
             @mixin icon-btn_5_2 {
-                background-position: 0  (-316px) ;
+                background-position:  (-664px)   (-316px) ;
                 width: (324px);
                 height: (81px);
             }
             @mixin icon-btn_5_3 {
-                background-position:  (-329px)   (-405px) ;
+                background-position:  (-329px)   (-452px) ;
                 width: (321px);
                 height: (80px);
             }
             @mixin icon-btn_5_4 {
-                background-position: 0  (-405px) ;
+                background-position: 0  (-452px) ;
                 width: (321px);
                 height: (81px);
             }
             @mixin icon-choose {
-                background-position:  (-664px)   (-346px) ;
+                background-position:  (-819px)   (-452px) ;
                 width: (32px);
                 height: (33px);
             }
             @mixin icon-close {
-                background-position:  (-664px)   (-302px) ;
+                background-position:  (-775px)   (-452px) ;
                 width: (36px);
                 height: (36px);
             }
             @mixin icon-correct {
-                background-position:  (-664px)   (-216px) ;
+                background-position:  (-664px)   (-405px) ;
                 width: (46px);
                 height: (32px);
             }
             @mixin icon-dot_1 {
-                background-position:  (-664px)   (-387px) ;
+                background-position:  (-718px)   (-405px) ;
                 width: (38px);
                 height: (25px);
             }
             @mixin icon-dot_2 {
-                background-position:  (-664px)   (-420px) ;
+                background-position:  (-1302px)   (-226px) ;
                 width: (16px);
                 height: (16px);
             }
             @mixin icon-error {
-                background-position:  (-664px)   (-256px) ;
+                background-position:  (-729px)   (-452px) ;
                 width: (38px);
                 height: (38px);
             }
             @mixin icon-fish {
-                background-position:  (-54px)   (-494px) ;
+                background-position:  (-658px)   (-452px) ;
                 width: (63px);
                 height: (58px);
             }
             @mixin icon-medal_1 {
-                background-position:  (-664px)   (-144px) ;
+                background-position:  (-174px)   (-541px) ;
                 width: (49px);
                 height: (64px);
             }
             @mixin icon-medal_2 {
-                background-position:  (-664px)  0;
+                background-position:  (-54px)   (-541px) ;
                 width: (52px);
                 height: (64px);
             }
             @mixin icon-medal_3 {
-                background-position:  (-664px)   (-72px) ;
+                background-position:  (-114px)   (-541px) ;
                 width: (52px);
                 height: (64px);
             }
         @mixin sprite-icon {
-            background-image: url(../assets/sprite.png?v=1612767459000);
+            background-image: url(../assets/sprite.png?v=1612776079000);
             background-repeat: no-repeat;
-            background-size: (716px) (594px);
+            background-size: (1320px) (641px);
         }
 
 

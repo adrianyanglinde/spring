@@ -15,6 +15,7 @@ import {
   setAuth
 } from '../src/common/user';
 import "./sass/index.scss";
+import marqueeNew from "../src/common/ks.marqueeNew.js";
 import click1 from '../src/assets/click1.mp3';
 import click2 from '../src/assets/click2.mp3';
 import click3 from '../src/assets/click3.mp3';
@@ -60,7 +61,11 @@ const renderRank = data => {
   if(data.gotEggList && data.gotEggList.length > 0){
     htmlEgg = `<i></i>${data.gotEggList.join("、")}触发锦鲤奖励`
   }
-  $(".rank-list ul").html(html);
+  $(".rank-list").html(`
+    <div class="rank-mask-top"></div>
+    <ul>${html}</ul>
+    <div class="rank-mask-btm"></div>
+  `);
   $(".rank-egg").html(htmlEgg);
 }
 
@@ -76,6 +81,19 @@ const renderPage = data => {
   $(".j-rank").html(data.gameInfo.rank);
   $(".j-score").html(data.gameInfo.scores);
   $(".j-username").html(data.userInfo.username);
+  $(".j-hasNext").html(data.config.hasNext);
+  changeStartBtn();
+}
+const changeStartBtn = () => {
+  let isOver = +$(".j-isOver").html();
+  let hasNext = +$(".j-hasNext").html();
+  if(isOver==1){
+    $(".btn-start")[0].className = "btn-start nextyear";
+  }else if((isOver<0)&&(hasNext==1)){
+    $(".btn-start")[0].className = "btn-start over";
+  }else{
+    $(".btn-start")[0].className = "btn-start";
+  }
 }
 
 const renderQuestion = data => {
@@ -246,7 +264,7 @@ const showDialog = (id,data,cb) => {
   </div>
   <div class="dialog-mask"></div>
   `;
-  console.log(temp)
+
   setTimeout(()=>{
     $(`#j-dialog-${id}`).html(temp).show();
     cb && cb();
@@ -264,7 +282,7 @@ const hideDialog = (id) => {
 
 /**获取题目 */
 const getQuestion = () => {
-  post(API.GET_QUESTION,{preId:+preId})
+  return post(API.GET_QUESTION,{preId:+preId})
   .then(result=>{
     lock = false;
     preId = +result.info.id;
@@ -312,6 +330,8 @@ const countDown = (now,end) => {
     },1000);                     
   }else{
     $(".j-isOver").html(0);
+    $(".j-leaveTimes").html(3);
+    changeStartBtn();
     hideDialog("count");
     getRankList();
   }
@@ -356,7 +376,14 @@ const getRankList = () => {
   post(API.GET_RANK_LIST)
   .then(result=>renderRank(result.info))
   .then(()=>{
-    
+    new marqueeNew({
+      target : '.rank-list ul',//滚动对象 一般为 ul
+      items : '.rank-list li', //滚动的详细列表
+      //speed : 1,//滚动速度，像素
+      direction : marqueeNew.UP,//滚动方向
+      // movetime : 2000,//[int:ms] 移动速度
+			// movelength : 10,//[int:px] 每次移动的长度
+    });
   })
 }
 
@@ -388,6 +415,27 @@ const submit = () => {
   });
 }
 
+const startCountDown = (cb) => {
+  
+  let timer;
+  let txt = 3;
+  let setCountDown = () => {
+    if((txt>=0)&&(txt<=3)){
+      if(txt==0){txt='GO'}
+      $("#j-count-mask").html(`<div class="mask-inner">${txt}</div>`).show();
+      txt-=1;
+      timer = setTimeout(() => {
+        setCountDown(cb)
+      }, 1000);
+    }else{
+      clearTimeout(timer);
+      cb();
+      $("#j-count-mask").html("").hide();
+    }
+  }
+  setCountDown(cb)
+}
+
 /**初始化 */
 const init = () => {
   
@@ -396,17 +444,25 @@ const init = () => {
   
   $(document).on("click",'.btn-start',function(){
     let leaveTimes = +$(".j-leaveTimes").html();
+    
+    if($(this).hasClass("over") || $(this).hasClass("nextyear")){
+      return
+    }
     if(leaveTimes <= 0){
       toast("您已经没有次数了哦~");
       return
     }
-    post(API.START_ANSWER)
-    .then(result=>{
-      audios.start.play();
+    getQuestion()
+    .then(()=>{
       $(".page-game").show()
       $(".page-home").hide()
-      finalId = +result.info.id;
-      getQuestion();
+      startCountDown(()=>{
+        audios.start.play();
+        post(API.START_ANSWER)
+        .then(result=>{
+          finalId = +result.info.id;
+        })
+      });
     })
   })
   $(document).on("click",'.j-next',function(){
@@ -579,9 +635,6 @@ const init = () => {
   })
 }
 
-
-
-
 const initRuleScroll = () => {
   // if(bsscroll){
   //   bsscroll.refresh();
@@ -602,6 +655,8 @@ const initRuleScroll = () => {
 }
 
 $(document).ready(function () {
+  
+  
   enter();
 
 });

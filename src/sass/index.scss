@@ -101,12 +101,31 @@ body{
 .btn{
     &-start{
         @include sprite-icon;
-        @include icon-btn_3;
+        @include icon-btn_3_1;
         top:608px;
         left:50%;
         margin-left: -328px;
         position: absolute;
         -webkit-animation:shake_1 .2s .7s;
+        &.nextyear{
+            @include icon-btn_3_2;
+        }
+        &.over{
+            @include icon-btn_3_3;
+        }
+        span{
+            line-height: 32px;
+            font-size: 24px;
+            color: #e28831;
+            position: absolute;
+            left:0;
+            width: 100%;
+            bottom:82px;
+            text-align: center;
+            i{
+                font-style: normal;
+            }
+        }
     }
     &-confirm,
     &-next,
@@ -298,6 +317,22 @@ body{
     z-index: 2;
     width: 710px;
     margin: -100px auto 0;
+    &-mask-top,
+    &-mask-btm{
+        position: absolute;
+        width: 100%;
+        height: 80px;
+        left:0;
+        z-index: 8;
+    }
+    &-mask-top{
+        top:0;
+        background: linear-gradient(#fce0be, transparent);
+    }
+    &-mask-btm{
+        bottom:0;
+        background: linear-gradient(to top, #fce0be, transparent);
+    }
     &-top{
         background: url(../assets/frm_4.png) 0 top no-repeat;
         height: 121px;
@@ -350,6 +385,7 @@ body{
         color: #6d3f41;
         background: #ffd08e;
         font-size: 34px;
+        margin-bottom: 10px;
         span{
             float: left;
         }
@@ -810,4 +846,31 @@ body{
     width: 100%;
     color: #fea179;
     font-size: 28px;
+}
+
+.count-mask{
+    background: rgba(0,0,0,.7);
+    z-index: 9;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.mask-inner{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 250px;
+    color: #ffd375;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    display:-webkit-flex; 
+    justify-content: center;
+    align-items: center;
+    -webkit-align-items:center;
 }

@@ -455,8 +455,8 @@ body {
   position: absolute;
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: 0 -6.59rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: 0 -7.21rem;
   width: 0.61rem;
   height: 1.33rem;
   top: 3.25rem;
@@ -487,7 +487,7 @@ body {
 .btn-start {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
+  background-size: 17.6rem 8.55rem;
   background-position: 0 0;
   width: 8.75rem;
   height: 2.91rem;
@@ -496,6 +496,33 @@ body {
   margin-left: -4.37rem;
   position: absolute;
   -webkit-animation: shake_1 .2s .7s;
+}
+
+.btn-start.nextyear {
+  background-position: 0 -3.01rem;
+  width: 8.75rem;
+  height: 2.91rem;
+}
+
+.btn-start.over {
+  background-position: -8.85rem 0;
+  width: 8.75rem;
+  height: 2.91rem;
+}
+
+.btn-start span {
+  line-height: 0.43rem;
+  font-size: 0.32rem;
+  color: #e28831;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 1.09rem;
+  text-align: center;
+}
+
+.btn-start span i {
+  font-style: normal;
 }
 
 .btn-confirm,
@@ -509,11 +536,11 @@ body {
   font-size: 0.37rem;
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
+  background-size: 17.6rem 8.55rem;
 }
 
 .btn-back {
-  background-position: -5.19rem -3.01rem;
+  background-position: -14.04rem -3.01rem;
   width: 3.21rem;
   height: 1.09rem;
 }
@@ -521,7 +548,7 @@ body {
 .btn-confirm,
 .btn-next,
 .btn-submit {
-  background-position: 0 -3.01rem;
+  background-position: -8.85rem -3.01rem;
   width: 5.08rem;
   height: 1.09rem;
 }
@@ -529,8 +556,8 @@ body {
 .btn-rule2 {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: 0 -5.4rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: 0 -6.03rem;
   width: 4.28rem;
   height: 1.08rem;
   position: absolute;
@@ -542,8 +569,8 @@ body {
 .btn-again {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: -4.39rem -5.4rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: -4.39rem -6.03rem;
   width: 4.28rem;
   height: 1.07rem;
   display: inline-block;
@@ -552,8 +579,8 @@ body {
 .btn-receive {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: -4.43rem -4.21rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: -13.28rem -4.21rem;
   width: 4.28rem;
   height: 1.08rem;
   display: inline-block;
@@ -641,11 +668,11 @@ body {
   top: 0.43rem;
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
+  background-size: 17.6rem 8.55rem;
 }
 
 .question-input.correct i {
-  background-position: -8.85rem -2.88rem;
+  background-position: -8.85rem -5.4rem;
   width: 0.61rem;
   height: 0.43rem;
   display: block;
@@ -653,7 +680,7 @@ body {
 
 .question-input.error i {
   top: 0.37rem;
-  background-position: -8.85rem -3.41rem;
+  background-position: -9.72rem -6.03rem;
   width: 0.51rem;
   height: 0.51rem;
   display: block;
@@ -687,7 +714,7 @@ body {
 .question-options .item-select i {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
+  background-size: 17.6rem 8.55rem;
   position: absolute;
   display: none;
 }
@@ -699,21 +726,21 @@ body {
 }
 
 .question-options .item.selected .item-select i {
-  background-position: -8.85rem -4.61rem;
+  background-position: -10.92rem -6.03rem;
   width: 0.43rem;
   height: 0.44rem;
   display: block;
 }
 
 .question-options .item.correct .item-select i {
-  background-position: -8.85rem -2.88rem;
+  background-position: -8.85rem -5.4rem;
   width: 0.61rem;
   height: 0.43rem;
   display: block;
 }
 
 .question-options .item.error .item-select i {
-  background-position: -8.85rem -3.41rem;
+  background-position: -9.72rem -6.03rem;
   width: 0.51rem;
   height: 0.51rem;
   display: block;
@@ -724,6 +751,25 @@ body {
   z-index: 2;
   width: 9.47rem;
   margin: -1.33rem auto 0;
+}
+
+.rank-mask-top,
+.rank-mask-btm {
+  position: absolute;
+  width: 100%;
+  height: 1.07rem;
+  left: 0;
+  z-index: 8;
+}
+
+.rank-mask-top {
+  top: 0;
+  background: linear-gradient(#fce0be, transparent);
+}
+
+.rank-mask-btm {
+  bottom: 0;
+  background: linear-gradient(to top, #fce0be, transparent);
 }
 
 .rank-top {
@@ -773,8 +819,8 @@ body {
 .rank-egg i {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: -0.72rem -6.59rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: -8.77rem -6.03rem;
   width: 0.84rem;
   height: 0.77rem;
   position: absolute;
@@ -788,6 +834,7 @@ body {
   color: #6d3f41;
   background: #ffd08e;
   font-size: 0.45rem;
+  margin-bottom: 0.13rem;
 }
 
 .rank-me span {
@@ -830,7 +877,7 @@ body {
 .rank li i {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
+  background-size: 17.6rem 8.55rem;
   position: absolute;
   top: 0.2rem;
   left: 0.71rem;
@@ -842,19 +889,19 @@ body {
 }
 
 .rank li .item-rank-1 i {
-  background-position: -8.85rem -1.92rem;
+  background-position: -2.32rem -7.21rem;
   width: 0.65rem;
   height: 0.85rem;
 }
 
 .rank li .item-rank-2 i {
-  background-position: -8.85rem 0;
+  background-position: -0.72rem -7.21rem;
   width: 0.69rem;
   height: 0.85rem;
 }
 
 .rank li .item-rank-3 i {
-  background-position: -8.85rem -0.96rem;
+  background-position: -1.52rem -7.21rem;
   width: 0.69rem;
   height: 0.85rem;
 }
@@ -951,8 +998,8 @@ body {
 .dialog-close {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: -8.85rem -4.03rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: -10.33rem -6.03rem;
   width: 0.48rem;
   height: 0.48rem;
   position: absolute;
@@ -1155,8 +1202,8 @@ body {
 .dialog .rule-list li i {
   background-image: url(../img/sprite.png);
   background-repeat: no-repeat;
-  background-size: 9.55rem 7.92rem;
-  background-position: -8.85rem -5.6rem;
+  background-size: 17.6rem 8.55rem;
+  background-position: -17.36rem -3.01rem;
   width: 0.21rem;
   height: 0.21rem;
   position: absolute;
@@ -1286,4 +1333,32 @@ body {
   width: 100%;
   color: #fea179;
   font-size: 0.37rem;
+}
+
+.count-mask {
+  background: rgba(0,0,0,0.7);
+  z-index: 9;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.mask-inner {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  font-weight: bold;
+  font-size: 3.33rem;
+  color: #ffd375;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-align-items: center;
 }
