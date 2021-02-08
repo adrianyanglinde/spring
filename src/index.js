@@ -44,12 +44,11 @@ let finalId = 0;  //最终提交答案id
 let lock = false;  //是否在间隔时间内
 
 const renderRank = data => {
-  
-  let html = "";
-  if(data.length <= 0){
+  let html = "",htmlEgg = "";
+  if(data.rankList.length <= 0){
     html = `<li class="rank-empty">列表为空</li>`;
   }else{
-    html = data.map((item,index) => `
+    html = data.rankList.map((item,index) => `
     <li>
       <span class="item-rank item-rank-${index+1}">
         ${index <= 2 ? `<i>${item.rank}</i>` : item.rank}
@@ -58,7 +57,11 @@ const renderRank = data => {
       <span class="item-score">${item.scores}分</span>
     </li>`).join("");
   }
+  if(data.gotEggList && data.gotEggList.length > 0){
+    htmlEgg = `<i></i>${data.gotEggList.join("、")}触发锦鲤奖励`
+  }
   $(".rank-list ul").html(html);
+  $(".rank-egg").html(htmlEgg);
 }
 
 const renderPage = data => {
@@ -68,8 +71,11 @@ const renderPage = data => {
     <span class="item-score">${data.gameInfo.scores}分</span>
   `;
   $(".rank-me").html(html);
-  $(".leaveTimes").html(data.gameInfo.leaveTimes);
-  $(".isOver").html(data.config.isOver);
+  $(".j-leaveTimes").html(data.gameInfo.leaveTimes);
+  $(".j-isOver").html(data.config.isOver);
+  $(".j-rank").html(data.gameInfo.rank);
+  $(".j-score").html(data.gameInfo.scores);
+  $(".j-username").html(data.userInfo.username);
 }
 
 const renderQuestion = data => {
@@ -131,7 +137,7 @@ const renderQuestion = data => {
 const contentTemp = (id,data) => {
   const temp = {
     'result' : (data)=>`
-      <div class="dialog-close j-close" data-id="${id}"></div>
+      
       <div class="dialog-douwa"></div>
       <div class="dialog-top"></div>
       <div class="dialog-mid">
@@ -143,7 +149,7 @@ const contentTemp = (id,data) => {
           </div>
           <div class="result-mid">
             <p>答对${data.scores}题</p>
-            <p>耗时${data.total_time}</p>
+            <p>耗时${data.totalTime}</p>
             <p>剩余<span>${data.leaveTimes}</span>次挑战机会</p>
           </div>
           <a href="javascript:;" class="btn-again j-again"></a>
@@ -160,7 +166,35 @@ const contentTemp = (id,data) => {
           <div class="write-txt">第43个提交答卷<br>获得99元现金奖励</div>
           <div class="write-input"><input type="text" placeholder="请输入支付宝账号"/></div>
           <div class="write-tip">账号仅供奖金发放使用，提交后不可更改</div>
-          <a href="javascript:;" class="btn-receive j-again"></a>
+          <a href="javascript:;" class="btn-receive j-receive-egg"></a>
+        </div>
+      </div>
+      <div class="dialog-btm"></div>
+    `,
+    'grade' : (data)=>`
+      <div class="dialog-douwa"></div>
+      <div class="dialog-top"></div>
+      <div class="dialog-mid">
+        <div class="write-cont">
+          <div class="write-title">第${data.rank}名</div>
+          <div class="write-txt">获得${data.money}现金</div>
+          <div class="write-input"><input type="text" placeholder="请输入支付宝账号"/></div>
+          <div class="write-tip">账号仅供奖金发放使用，提交后不可更改</div>
+          ${data.hasNext==1 ? `<div class="has-next">下一场大年初三9：00再次开启</div>` : ``}
+          <a href="javascript:;" class="btn-receive j-receive-grade"></a>
+        </div>
+      </div>
+      <div class="dialog-btm"></div>
+    `,
+    'gradeNone' : (data)=>`
+      <div class="dialog-douwa"></div>
+      <div class="dialog-top"></div>
+      <div class="dialog-mid">
+        <div class="gradeNone-cont">
+          <div class="gradeNone-title">本次活动未获得排名</div>
+          <div class="gradeNone-txt"></div>
+          ${data.hasNext==1 ? `<div class="has-next">下一场大年初三9：00再次开启</div>` : ``}
+          <a href="javascript:;" class="btn-receive j-receive-gradeNone"></a>
         </div>
       </div>
       <div class="dialog-btm"></div>
@@ -195,7 +229,6 @@ const contentTemp = (id,data) => {
                   第31-100名         奖金 18元<br>
                   第101-200名       奖金  8 元<br>
               </li>
-            
             </ul>
           </div>
         </div>
@@ -205,7 +238,7 @@ const contentTemp = (id,data) => {
   }
   return temp[id](data);
 }
-const showDialog = (id,data,cb=function(){}) => {
+const showDialog = (id,data,cb) => {
  
   const temp = `
   <div class="dialog dialog-${id}">
@@ -213,13 +246,14 @@ const showDialog = (id,data,cb=function(){}) => {
   </div>
   <div class="dialog-mask"></div>
   `;
-
-  $(`#j-dialog-${id}`).html(temp).show();
+  console.log(temp)
   setTimeout(()=>{
-    $(`#j-dialog-${id}`).show();
+    $(`#j-dialog-${id}`).html(temp).show();
+    cb && cb();
+    //$(`#j-dialog-${id}`).show();
   },0)
   $(`body`)[0].className = "hidden";
-  cb();
+  
 }
 const hideDialog = (id) => {
   $(`#j-dialog-${id}`).html("").hide();
@@ -244,8 +278,8 @@ const enter = () => {
   // setTimeout(()=>{
   //   $(".head-douwa").addClass("bounce_1");
   // },1000)
-  setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
-  setSessionStorage('spIsBind',"1");
+  // setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
+  // setSessionStorage('spIsBind',"1");
   let token = getSessionStorage("spToken");
   let isBind = getSessionStorage("spIsBind");
   if(token && isBind){
@@ -277,7 +311,7 @@ const countDown = (now,end) => {
       countDown(now,end);
     },1000);                     
   }else{
-    $(".isOver").html(0);
+    $(".j-isOver").html(0);
     hideDialog("count");
     getRankList();
   }
@@ -288,16 +322,31 @@ const countDown = (now,end) => {
 const getPageData = () => {
   post(API.GET_PAGE_INFO)
   .then(result=>{
+    
     renderPage(result.info);
-    let {config} = result.info;
+    let {config,gameInfo,toast} = result.info;
     if(config.isOver==-2){
       showDialog("active",{text:"活动暂未开启<br>敬请期待"});
-    }else if(config.isOver==-1){
-      showDialog("count",{});
-      countDown(config.curTime,config.start);
-    }else if(config.isOver==0){
+    }else if((config.isOver==-1)||(config.isOver==1)){
+      if(toast.isWrote==1){
+        if(config.isOver==-1){
+          showDialog("count",{},()=>{
+            countDown(config.curTime,config.start);
+          });
+        }
+      }else if(toast.rank > 200){
+        showDialog("gradeNone",{
+          hasNext : config.hasNext
+        });
+      }else{
+        showDialog("grade",{
+          hasNext : config.hasNext,
+          money : toast.money,
+          rank : toast.rank
+        });
+      }
       getRankList();
-    }else if(config.isOver==1){
+    }else if(config.isOver==0){
       getRankList();
     }else{}
   })
@@ -324,11 +373,18 @@ const goBack = () => {
 const submit = () => {
   post(API.LAST_SUBMIT,{id:finalId})
   .then(result=>{
-    let leaveTimes = +$(".leaveTimes").html();
+    let leaveTimes = +$(".j-leaveTimes").html();
     leaveTimes-=1;
-    $(".leaveTimes").html(leaveTimes);
+    $(".j-leaveTimes").html(leaveTimes);
+    $(".j-rank").html(result.info.rank);
+    $(".j-scores").html(result.info.scores);
+    $(".j-totalTime").html(result.info.totalTime);
     result.info.leaveTimes = leaveTimes;
-    showDialog("result",result.info);
+    if(result.info.gotAward){
+      showDialog("egg",{});
+    }else{
+      showDialog("result",result.info);
+    }
   });
 }
 
@@ -336,10 +392,10 @@ const submit = () => {
 const init = () => {
   
   getPageData();
-  showDialog("egg",{});
+
   
   $(document).on("click",'.btn-start',function(){
-    let leaveTimes = +$(".leaveTimes").html();
+    let leaveTimes = +$(".j-leaveTimes").html();
     if(leaveTimes <= 0){
       toast("您已经没有次数了哦~");
       return
@@ -388,6 +444,9 @@ const init = () => {
     }
   })
   $(document).on("click",'.j-confirm',function(){
+    if(lock){
+      return false;
+    }
     let $question = $(".question");
     let type = $question.data("type");
     let answer = [];
@@ -470,20 +529,57 @@ const init = () => {
   })
   $(document).on("click",'.j-close',function(){
     hideDialog($(this).data("id"));
-    let isOver = $(".isOver").html();
+    let isOver = $("j-isOver").html();
     if(isOver==-1){
       $("#j-dialog-count").show();
     }
   })
   $(document).on("click",'.j-rule',function(){
     showDialog("rule",{},initRuleScroll);
-    let isOver = $(".isOver").html();
+    let isOver = $("j-isOver").html();
     if(isOver==-1){
       $("#j-dialog-count").hide();
     }
   })
-  
+  $(document).on("click",'.j-receive-egg',function(){
+    let value = $.trim($(this).closest(".write-cont").find("input").val());
+    if(value==""){
+      toast("请输入支付宝账号哦~");
+      return false;
+    }
+    post(API.WRITE_PAY_ACCOUNT,{account:value})
+    .then(result=>{
+      toast("提交成功~");
+      hideDialog("egg");
+      showDialog("result",{
+        rank : $(".j-rank").html(),
+        scores : $(".j-scores").html(),
+        totalTime : $(".j-totalTime").html(),
+        leaveTimes : $(".j-leaveTimes").html()
+      });
+    })
+  })
+  $(document).on("click",'.j-receive-grade',function(){
+    let value = $.trim($(this).closest(".write-cont").find("input").val());
+    if(value==""){
+      toast("请输入支付宝账号哦~");
+      return false;
+    }
+    post(API.WRITE_PAY_ACCOUNT,{account:value})
+    .then(result=>{
+      toast("提交成功~");
+      hideDialog("grade");
+    })
+  })
+  $(document).on("click",'.j-receive-gradeNone',function(){
+    post(API.WRITE_PAY_ACCOUNT,{account:""})
+    .then(result=>{
+      hideDialog("gradeNone");
+    })
+  })
 }
+
+
 
 
 const initRuleScroll = () => {

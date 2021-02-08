@@ -8,8 +8,8 @@ import {
 } from './user';
 import useMock from './mock';
 
-const isMock = true;
-const env = "dev";
+const isMock = false;
+const env = "test";
 let HOST = "";
 switch (env) {
   case "dev":
@@ -32,6 +32,7 @@ export const API = {
   LAST_SUBMIT : `${HOST}/spring/springactivity/lastSubmit`,
   GET_PAGE_INFO : `${HOST}/spring/springactivity/getPageInfo`,
   GET_RANK_LIST : `${HOST}/spring/springactivity/getRankList`,
+  WRITE_PAY_ACCOUNT : `${HOST}/spring/springactivity/writePayAccount`,
 
   GET_ACCESS_TOKEN : `${HOST}/wap/wapindex/getAccessToken`,
   jumpWXAuth : `${HOST}/wap/wapindex/jumpWXAuth`,

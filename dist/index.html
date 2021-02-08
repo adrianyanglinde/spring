@@ -29,18 +29,27 @@
                 <div class="bg3"></div>
                 <div class="head-tit"></div>
                 <div class="head-douwa"></div>
-                <div class="head-rule"></div>
+                <div class="head-rule j-rule"></div>
+                <div class="head-coin"></div>
                 <a href="javascript:;" class="btn-start"></a>
-                <div class="countdown" data-start="" data-end=""></div>
-                <div class="leaveTimes1">剩余次数<span class="leaveTimes">0</span></div>
+
+                <div class="countdown"  style="display: none;" data-start="" data-end=""></div>
+                <div class="j-leaveTimes" style="display: none;">0</div>
+                <div class="j-isOver" style="display: none;">0</div>
+                <div class="j-rank" style="display: none;">0</div>
+                <div class="j-scores" style="display: none;">0</div>
+                <div class="j-totalTime" style="display: none;">0</div>
+                <div class="j-hasNext" style="display: none;">0</div>
+                <div class="j-isWrote" style="display: none;">0</div>
+                <div class="j-username" style="display: none;"></div>
             </div>
             <div class="rank">
-                <div class="rank-top">
-                    <div class="rank-me"></div>
-                </div>
+                <div class="rank-top"></div>
                 <div class="rank-mid">
+                    <div class="rank-egg"></div>
+                    <div class="rank-me"></div>
                     <div class="rank-list">
-                        <ul><li class="rank-loading">数据加载中...</li></ul>
+                        <ul></ul>
                     </div>
                 </div>
                 <div class="rank-btm"></div>
@@ -57,6 +66,13 @@
             <div class="game-bottom"></div>
         </div>
         <div class="wave"></div>
+        <div class="dialog-wrap" id="j-dialog-gradeNone"></div>
+        <div class="dialog-wrap" id="j-dialog-grade"></div>
+        <div class="dialog-wrap" id="j-dialog-result"></div>
+        <div class="dialog-wrap" id="j-dialog-active"></div>
+        <div class="dialog-wrap" id="j-dialog-count"></div>
+        <div class="dialog-wrap" id="j-dialog-rule"></div>
+        <div class="dialog-wrap" id="j-dialog-egg"></div>
         <div class="popup-wrap" id="j-popup"></div>
     </div>
     
