@@ -9,7 +9,8 @@ import {
 import {
   toast, 
   setSessionStorage,
-  getSessionStorage
+  getSessionStorage,
+  throttle
 } from '../src/common/utils';
 import {
   setAuth
@@ -296,8 +297,8 @@ const enter = () => {
   // setTimeout(()=>{
   //   $(".head-douwa").addClass("bounce_1");
   // },1000)
-  // setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
-  // setSessionStorage('spIsBind',"1");
+  setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
+  setSessionStorage('spIsBind',"1");
   let token = getSessionStorage("spToken");
   let isBind = getSessionStorage("spIsBind");
   if(token && isBind){
@@ -347,26 +348,39 @@ const getPageData = () => {
     let {config,gameInfo,toast} = result.info;
     if(config.isOver==-2){
       showDialog("active",{text:"活动暂未开启<br>敬请期待"});
-    }else if((config.isOver==-1)||(config.isOver==1)){
-      if(toast.isWrote==1){
-        if(config.isOver==-1){
-          showDialog("count",{},()=>{
-            countDown(config.curTime,config.start);
+    }else if(config.isOver==-1){
+      getRankList();
+      if(toast && (toast.isWrote==0)){
+        if(toast.gotAward){
+          showDialog("grade",{
+            hasNext : config.hasNext,
+            money : toast.money,
+            rank : toast.rank
+          });
+        }else{
+          showDialog("gradeNone",{
+            hasNext : config.hasNext
           });
         }
-      }else if(toast.rank > 200){
-        showDialog("gradeNone",{
-          hasNext : config.hasNext
-        });
-      }else{
+        return
+      }
+      showDialog("count",{},()=>{
+        countDown(config.curTime,config.start);
+      });
+    }else if(config.isOver==0){
+      getRankList();
+    }else if(config.isOver==1){
+      if(toast.gotAward){
         showDialog("grade",{
           hasNext : config.hasNext,
           money : toast.money,
           rank : toast.rank
         });
+      }else{
+        showDialog("gradeNone",{
+          hasNext : config.hasNext
+        });
       }
-      getRankList();
-    }else if(config.isOver==0){
       getRankList();
     }else{}
   })
@@ -407,7 +421,7 @@ const submit = () => {
     $(".j-scores").html(result.info.scores);
     $(".j-totalTime").html(result.info.totalTime);
     result.info.leaveTimes = leaveTimes;
-    if(result.info.gotAward){
+    if(result.info.gotEgg){
       showDialog("egg",{});
     }else{
       showDialog("result",result.info);
@@ -499,10 +513,8 @@ const init = () => {
       }
     }
   })
-  $(document).on("click",'.j-confirm',function(){
-    if(lock){
-      return false;
-    }
+  $(document).on("click",'.j-confirm',throttle(function(){
+    
     let $question = $(".question");
     let type = $question.data("type");
     let answer = [];
@@ -532,6 +544,7 @@ const init = () => {
       record_id : +$question.data("record"),
       answer : answer
     }
+   
     post(API.SUBMIT_ANSWER,params)
     .then(result=>{
       lock = true;
@@ -582,7 +595,7 @@ const init = () => {
       //JSON.stringify(error);
       toast(JSON.stringify(error));
     })
-  })
+  },2000))
   $(document).on("click",'.j-close',function(){
     hideDialog($(this).data("id"));
     let isOver = $("j-isOver").html();
@@ -625,12 +638,23 @@ const init = () => {
     .then(result=>{
       toast("提交成功~");
       hideDialog("grade");
+      if((result.info.config.session_id==1) && (result.info.config.isOver==-1)){
+        console.log("ss");
+        showDialog("count",{},()=>{
+          countDown(result.info.config.curTime,result.info.config.start);
+        });
+      }
     })
   })
   $(document).on("click",'.j-receive-gradeNone',function(){
     post(API.WRITE_PAY_ACCOUNT,{account:""})
     .then(result=>{
       hideDialog("gradeNone");
+      if((result.info.config.session_id==1) && (result.info.config.isOver==-1)){
+        showDialog("count",{},()=>{
+          countDown(result.info.config.curTime,result.info.config.start);
+        });
+      }
     })
   })
 }

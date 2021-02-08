@@ -72,7 +72,7 @@ const mock = (url) => {
           "rank": 100,
           "scores": 1,
           "totalTime": "0h10m0s",
-          "gotAward": 0
+          "gotEgg": 1
       },
       "code": 1000,
       "msg": "操作成功"
@@ -91,18 +91,18 @@ const mock = (url) => {
               "empno": "3088"
           },
           "toast": {
-              "rank": 201,
+              "rank": 1,
               "gotAward": 1,
               "isWrote": 1,
               "money": 188
           },
           "config": {
-              "start": 1612687800,
+              "start": 1612780200,
               "end": 1612749300,
               "session_id": 2,
               "hasNext": 1,
               "isOver": 0,
-              "curTime": 1612687790
+              "curTime": 1612780195
           },
           "gameInfo": {
               "scores": 200,
@@ -117,6 +117,16 @@ const mock = (url) => {
   if (new RegExp(API.WRITE_PAY_ACCOUNT).test(url)) {
     return  {
       "code": 1000,
+      "info": {
+        "config": {
+          "start": 1612780200,
+          "end": 1612749300,
+          "session_id": 2,
+          "hasNext": 1,
+          "isOver": -1,
+          "curTime": 1612780195
+        }
+      },
       "msg": "操作成功"
     }
   }

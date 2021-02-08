@@ -24,7 +24,7 @@ export const setAuth = () => {
                 setSessionStorage('spIsBind','true');
                 defer.resolve();
             }else{
-                window.location.href = `/dist/login/`;
+                window.location.href = `/dist/#/login`;
             }
         })
     }else{

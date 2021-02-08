@@ -16,7 +16,7 @@ switch (env) {
     HOST = "";
     break;
   case "test":
-    HOST = "https://college.4399tech.com/LCT";
+    HOST = "https://college.4399tech.com/DEV";
     break;
   case "online":
     HOST = "https://college.4399tech.com";
