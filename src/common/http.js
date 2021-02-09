@@ -9,14 +9,14 @@ import {
 import useMock from './mock';
 
 const isMock = false;
-const env = "test";
+const env = "online";
 let HOST = "";
 switch (env) {
   case "dev":
     HOST = "";
     break;
   case "test":
-    HOST = "https://college.4399tech.com/DEV";
+    HOST = "https://college.4399tech.com/LCT";
     break;
   case "online":
     HOST = "https://college.4399tech.com";
@@ -36,7 +36,7 @@ export const API = {
 
   GET_ACCESS_TOKEN : `${HOST}/wap/wapindex/getAccessToken`,
   jumpWXAuth : `${HOST}/wap/wapindex/jumpWXAuth`,
-  REDIRECT_URI : `${HOST}/spring/index.html`
+  REDIRECT_URI : `${HOST}/spring/index.html`       //${HOST}/spring/index.html ${HOST}/rank/index.html
 }
 
 const checkCode = result => {

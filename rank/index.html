@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>欢乐答题-中奖名单</title>
+    <script>
+        (function(doc, win) {
+            const docEl = doc.documentElement;
+            const resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize';
+            const recalc = function() {
+                const clientWidth = docEl.clientWidth > 750 ? 750 : docEl.clientWidth;
+                if (!clientWidth) return;
+                docEl.style.fontSize = clientWidth / 10 + 'px';
+            };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+<link href="./css/0.css" rel="stylesheet"></head>
+<body>
+    <div class="view page-rank">
+        <div class="page-home">
+            <div class="head">
+                <div class="bg1"></div>
+                <div class="bg2"></div>
+                <div class="bg3"></div>
+                <div class="head-tit"></div>
+                <div class="head-douwa"></div>
+                <div class="head-rule j-rule"></div>
+                <div class="head-coin"></div>
+                <div class="head-tab">
+                    <a href="javascript:;" data-index="1">第一场</a>
+                    <a href="javascript:;" data-index="2">第二场</a>
+                </div>
+            </div>
+            <div class="rank">
+                <div class="rank-top"></div>
+                <div class="rank-mid">
+                    <div class="rank-egg"></div>
+                    <div class="rank-list"></div>
+                </div>
+                <div class="rank-btm"></div>
+            </div>
+        </div>
+        <div class="wave"></div>
+        <div class="dialog-wrap" id="j-dialog-rule"></div>
+        <div class="popup-wrap" id="j-popup"></div>
+    </div>
+    
+    <script>
+    /**eruda */
+    ;(function () {
+        if (!/mdebug=true/.test(window.location.href)) return;
+        var script = document.createElement('script')
+        script.src = "https://cdn.bootcss.com/eruda/1.2.6/eruda.min.js"
+        script.async = true
+        document.getElementsByTagName('head')[0].appendChild(script)
+        script.onload = function () {
+            eruda.init()
+        }
+    })()
+    </script>
+<script type="text/javascript" src="./js/manifest.bundle.js"></script><script type="text/javascript" src="./js/vendors.bundle.js"></script><script type="text/javascript" src="./js/index.bundle.js"></script></body>
+</html>

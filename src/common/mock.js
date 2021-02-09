@@ -33,7 +33,7 @@ const mock = (url) => {
     return {
       "info": {
         "id": "5",
-        "question_type": "2",
+        "question_type": "3",
         "question": "计算机病毒是一种破坏计算机功能或者毁坏计算机中所存储数据的。",
         "choices": [
             {
@@ -59,7 +59,7 @@ const mock = (url) => {
   if (new RegExp(API.SUBMIT_ANSWER).test(url)) {
     return {
       "info": {
-          "isRight": 0,
+          "isRight": 1,
           "rightAnswer": "13"
       },
       "code": 1000,
@@ -99,7 +99,7 @@ const mock = (url) => {
           "config": {
               "start": 1612780200,
               "end": 1612749300,
-              "session_id": 2,
+              "session_id": 1,
               "hasNext": 1,
               "isOver": 0,
               "curTime": 1612780195
@@ -139,6 +139,61 @@ const mock = (url) => {
                   "scores": 34,
                   "rank": 1
               },
+              {
+                  "username": "秦文芳",
+                  "scores": 34,
+                  "rank": 1
+              },
+              {
+                "username": "秦文芳",
+                  "scores": 34,
+                  "rank": 1
+              },
+              {
+                  "username": "秦文芳",
+                  "scores": 34,
+                  "rank": 1
+              },
+              {
+                "username": "秦文芳",
+                "scores": 34,
+                "rank": 1
+            },
+            {
+                "username": "秦文芳",
+                "scores": 34,
+                "rank": 1
+            },
+            {
+              "username": "秦文芳",
+                "scores": 34,
+                "rank": 1
+            },
+            {
+                "username": "秦文芳",
+                "scores": 34,
+                "rank": 1
+            },
+            {
+              "username": "秦文芳",
+              "scores": 34,
+              "rank": 1
+          },
+          {
+              "username": "秦文芳",
+              "scores": 34,
+              "rank": 1
+          },
+          {
+            "username": "秦文芳",
+              "scores": 34,
+              "rank": 1
+          },
+          {
+              "username": "秦文芳",
+              "scores": 34,
+              "rank": 1
+          },
               {
                   "username": "叶碧林",
                   "scores": 4,

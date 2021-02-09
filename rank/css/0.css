@@ -81,10 +81,6 @@ a:hover {
 }
 
 .head-douwa.bounce_1 {
-  -webkit-animation: bounce_1 2.6s ease-in-out 1.3s infinite;
-}
-
-.head-coin.bounce_1 {
   -webkit-animation: bounce_1 2.6s ease-in-out infinite;
 }
 
@@ -94,11 +90,11 @@ a:hover {
   }
 
   25% {
-    -webkit-transform: translate(0, -0.13rem);
+    -webkit-transform: translate(0, 0.13rem);
   }
 
   75% {
-    -webkit-transform: translate(0, 0.13rem);
+    -webkit-transform: translate(0, -0.13rem);
   }
 
   100% {
@@ -118,7 +114,7 @@ a:hover {
 
   25% {
     opacity: 1;
-    -webkit-transform: scale(1.15);
+    -webkit-transform: scale(1);
   }
 
   40% {
@@ -126,7 +122,7 @@ a:hover {
   }
 
   55% {
-    -webkit-transform: scale(1.15);
+    -webkit-transform: scale(1);
   }
 
   70% {
@@ -710,10 +706,6 @@ a {
   border-bottom: 0.01rem dashed #efa17d;
 }
 
-.question-title span {
-  margin-right: 0.21rem;
-}
-
 .question-options .item {
   padding: 0.33rem 0 0.33rem 1.55rem;
   position: relative;
@@ -1112,7 +1104,7 @@ a {
   left: 50%;
   top: 50%;
   margin-left: -3.8rem;
-  margin-top: -2.88rem;
+  margin-top: -3.55rem;
 }
 
 .dialog-grade .dialog-douwa {
@@ -1131,7 +1123,7 @@ a {
   left: 50%;
   top: 50%;
   margin-left: -3.8rem;
-  margin-top: -2.75rem;
+  margin-top: -3.55rem;
 }
 
 .dialog-gradeNone .dialog-douwa {

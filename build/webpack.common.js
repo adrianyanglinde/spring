@@ -3,9 +3,11 @@ const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const SpritesmithPlugin = require("webpack-spritesmith");
 
+const page = "index";  //index rank
+
 module.exports = {
   entry: {
-    index: path.resolve(__dirname, "../src/index.js"),
+    index: path.resolve(__dirname, `../src/${page=="index" ? "index.js" : "rank.js"}`),
   },
   module: {
     rules: [
@@ -93,7 +95,7 @@ module.exports = {
     // This is especially useful for webpack bundles that include a hash in the filename
     // which changes every compilation
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "../src/index.html"),
+      template: path.resolve(__dirname, `../src/${page=="index" ? "index.html" : "rank.html"}`),
       inject: "body",
       filename: "./index.html"
     }),

@@ -1,15 +1,18 @@
 .head-douwa.bounce_1{
-    -webkit-animation:bounce_1 2.6s ease-in-out infinite;
+    -webkit-animation:bounce_1 2.6s ease-in-out 1.3s infinite;
+}
+.head-coin.bounce_1{
+  -webkit-animation:bounce_1 2.6s ease-in-out infinite;
 }
 @-webkit-keyframes bounce_1 {
   0% {
     -webkit-transform: translate(0, 0)
   }
   25%{
-    -webkit-transform: translate(0, 10px)
+    -webkit-transform: translate(0, -10px)
   }
   75%{
-    -webkit-transform: translate(0, -10px)
+    -webkit-transform: translate(0, 10px)
   }
   100%{
     -webkit-transform: translate(0, 0)
@@ -27,13 +30,13 @@
   }
   25%{
       opacity:1;
-      -webkit-transform:scale(1);
+      -webkit-transform:scale(1.15);
   }
   40%{
       -webkit-transform:scale(0.9);
   }
   55%{
-      -webkit-transform:scale(1);
+      -webkit-transform:scale(1.15);
   }
   70%{
        -webkit-transform:scale(0.98);

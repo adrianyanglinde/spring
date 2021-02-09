@@ -10,24 +10,27 @@ import {
   toast, 
   setSessionStorage,
   getSessionStorage,
-  throttle
+  throttle,
+  setCookie
 } from '../src/common/utils';
 import {
   setAuth
 } from '../src/common/user';
 import "./sass/index.scss";
 import marqueeNew from "../src/common/ks.marqueeNew.js";
-import click1 from '../src/assets/click1.mp3';
 import click2 from '../src/assets/click2.mp3';
 import click3 from '../src/assets/click3.mp3';
-import click4 from '../src/assets/click4.mp3';
-import click5 from '../src/assets/click5.mp3';
+import click6 from '../src/assets/click6.mp3';
+import click7 from '../src/assets/click7.mp3';
+import click8 from '../src/assets/click8.mp3';
+
 
 const audios = {
-  start : new Audio(click1),
+  start : new Audio(click7),
   next : new Audio(click3),
   error : new Audio(click2),
-  correct : new Audio(click4)
+  correct : new Audio(click8),
+  award : new Audio(click6)
 }
 
 //const router = new Router();
@@ -45,10 +48,12 @@ let preId = 0;    //当前题目id
 let finalId = 0;  //最终提交答案id
 let lock = false;  //是否在间隔时间内
 
+let curId = 0;  //当前题目计数器
+
 const renderRank = data => {
   let html = "",htmlEgg = "";
   if(data.rankList.length <= 0){
-    html = `<li class="rank-empty">列表为空</li>`;
+    html = `<div class="rank-empty">列表为空</div>`;
   }else{
     html = data.rankList.map((item,index) => `
     <li>
@@ -123,6 +128,7 @@ const renderQuestion = data => {
     <div class="question-input">
       <input type="text" placeholder="输入谜底"/><i></i>
     </div>
+    <div class="question-answer">正确答案：<span></span></div>
   </div>`
 
   const question = `
@@ -131,7 +137,7 @@ const renderQuestion = data => {
     data-type="${data.question_type}"
     data-record="${data.record_id}"
   >
-    <div class="question-title">${data.question}</div>
+    <div class="question-title"><span>${data.curId}/50</span>${data.question}</div>
     ${data.question_type == QUESTION_TYPE.SUBJECT ? 
       questionSubject 
       : 
@@ -240,7 +246,7 @@ const contentTemp = (id,data) => {
               <li><i></i>活动当天每人共有<span>3次</span>答题机会，取最高分计分（最高不超过50分）</li>
               <li><i></i>答题中途可选择结束答题，已答分数仍然有效</li>
               <li><i></i>活动期间，设置实时“英雄榜”对分数进行排名，若分数相同，则按答题用时顺序排名</li>
-              <li><i></i>活动截止后，再次点击链接进入活动，如已上榜会自动弹出需填写支付宝账号的界面，于正月<span>初八</span>统一发放奖励</li>
+              <li><i></i>活动截止后，再次扫描二维码进入活动页面，如已上榜会自动弹出需填写支付宝账号的界面，于正月<span>初七</span>统一发放奖励</li>
               <li><i></i>奖金设置：<br>
                   第1-3名              奖金188元<br>
                   第4-10名            奖金128元<br>
@@ -286,19 +292,23 @@ const getQuestion = () => {
   return post(API.GET_QUESTION,{preId:+preId})
   .then(result=>{
     lock = false;
+    curId+=1;
     preId = +result.info.id;
     hasNext = +result.info.next;
+    result.info.curId = curId;
     renderQuestion(result.info);
   })
 }
 
 /**入口 */
 const enter = () => {
-  // setTimeout(()=>{
-  //   $(".head-douwa").addClass("bounce_1");
-  // },1000)
-  setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
-  setSessionStorage('spIsBind',"1");
+  // setCookie("_V_","lct");
+  setTimeout(()=>{
+    $(".head-douwa").addClass("bounce_1");
+    $(".head-coin").addClass("bounce_1");
+  },1000)
+  // setSessionStorage('spToken',"azd0ZDZiMmh3TjI1ME9VSlVka3BNU0VRNE1IQk9WWGhKWVVkblVURTBRUT09");
+  // setSessionStorage('spIsBind',"1");
   let token = getSessionStorage("spToken");
   let isBind = getSessionStorage("spIsBind");
   if(token && isBind){
@@ -370,16 +380,18 @@ const getPageData = () => {
     }else if(config.isOver==0){
       getRankList();
     }else if(config.isOver==1){
-      if(toast.gotAward){
-        showDialog("grade",{
-          hasNext : config.hasNext,
-          money : toast.money,
-          rank : toast.rank
-        });
-      }else{
-        showDialog("gradeNone",{
-          hasNext : config.hasNext
-        });
+      if(toast.isWrote==0){
+        if(toast.gotAward){
+          showDialog("grade",{
+            hasNext : config.hasNext,
+            money : toast.money,
+            rank : toast.rank
+          });
+        }else{
+          showDialog("gradeNone",{
+            hasNext : config.hasNext
+          });
+        }
       }
       getRankList();
     }else{}
@@ -388,16 +400,22 @@ const getPageData = () => {
 
 const getRankList = () => {
   post(API.GET_RANK_LIST)
-  .then(result=>renderRank(result.info))
-  .then(()=>{
-    new marqueeNew({
-      target : '.rank-list ul',//滚动对象 一般为 ul
-      items : '.rank-list li', //滚动的详细列表
-      //speed : 1,//滚动速度，像素
-      direction : marqueeNew.UP,//滚动方向
-      // movetime : 2000,//[int:ms] 移动速度
-			// movelength : 10,//[int:px] 每次移动的长度
-    });
+  .then(result=>{
+    renderRank(result.info);
+    return result
+  })
+  .then(result=>{
+    if(result.info.rankList.length > 0){
+      new marqueeNew({
+        target : '.rank-list ul',//滚动对象 一般为 ul
+        items : '.rank-list li', //滚动的详细列表
+        //speed : 1,//滚动速度，像素
+        direction : marqueeNew.UP,//滚动方向
+        // movetime : 2000,//[int:ms] 移动速度
+        // movelength : 10,//[int:px] 每次移动的长度
+      });
+    }
+    
   })
 }
 
@@ -406,6 +424,7 @@ const goBack = () => {
   lock = false;
   hasNext = 0;
   preId = 0; 
+  curId = 0;
   $(".page-home").show()
   $(".page-game").hide()
   getPageData();
@@ -426,6 +445,7 @@ const submit = () => {
     }else{
       showDialog("result",result.info);
     }
+    audios.award.play();
   });
 }
 
@@ -470,8 +490,9 @@ const init = () => {
     .then(()=>{
       $(".page-game").show()
       $(".page-home").hide()
+      audios.start.play();
       startCountDown(()=>{
-        audios.start.play();
+        
         post(API.START_ANSWER)
         .then(result=>{
           finalId = +result.info.id;
@@ -562,6 +583,8 @@ const init = () => {
           $question.find(".question-input").addClass("correct");
         }else{
           $question.find(".question-input").addClass("error");
+          $question.find(".question-answer").show();
+          $question.find(".question-answer span").html(rightAnswer);
         }
       }else{
         if(isRight==1){
