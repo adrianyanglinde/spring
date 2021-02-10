@@ -49,6 +49,7 @@ let finalId = 0;  //最终提交答案id
 let lock = false;  //是否在间隔时间内
 
 let curId = 0;  //当前题目计数器
+let loading = false;
 
 const renderRank = data => {
   let html = "",htmlEgg = "";
@@ -287,10 +288,13 @@ const hideDialog = (id) => {
 
 
 
+
 /**获取题目 */
 const getQuestion = () => {
+  loading = true;
   return post(API.GET_QUESTION,{preId:+preId})
   .then(result=>{
+    loading = false;
     lock = false;
     curId+=1;
     preId = +result.info.id;
@@ -457,6 +461,7 @@ const startCountDown = (cb) => {
     if((txt>=0)&&(txt<=3)){
       if(txt==0){txt='GO'}
       $("#j-count-mask").html(`<div class="mask-inner">${txt}</div>`).show();
+      $(`body`)[0].className = "hidden";
       txt-=1;
       timer = setTimeout(() => {
         setCountDown(cb)
@@ -465,6 +470,7 @@ const startCountDown = (cb) => {
       clearTimeout(timer);
       cb();
       $("#j-count-mask").html("").hide();
+      $(`body`)[0].className = "";
     }
   }
   setCountDown(cb)
@@ -486,21 +492,23 @@ const init = () => {
       toast("您已经没有次数了哦~");
       return
     }
-    getQuestion()
-    .then(()=>{
-      $(".page-game").show()
-      $(".page-home").hide()
-      audios.start.play();
-      startCountDown(()=>{
-        
-        post(API.START_ANSWER)
-        .then(result=>{
-          finalId = +result.info.id;
-        })
-      });
+    post(API.START_ANSWER)
+    .then(result=>{
+      finalId = +result.info.id;
+      $(".page-game").show();
+      $(".page-home").hide();
+      getQuestion()
+      .then(()=>{
+        audios.start.play();
+        startCountDown(()=>{});
+      })
     })
+    
   })
   $(document).on("click",'.j-next',function(){
+    if(loading){
+      return false;
+    }
     audios.next.play();
     getQuestion();
   })

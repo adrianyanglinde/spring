@@ -395,15 +395,17 @@ a {
   margin: 0 auto;
   min-height: 100%;
   position: relative;
-  padding: 0 0 2.67rem;
 }
 
 .page-home {
   background: #e33a4d;
+  width: 100%;
+  padding: 0 0 2.67rem;
 }
 
 .page-game {
-  min-height: 100%;
+  width: 100%;
+  padding-bottom: 2.67rem;
 }
 
 #bg,
@@ -865,6 +867,7 @@ a {
   background: #ffd08e;
   font-size: 0.45rem;
   margin-bottom: 0.13rem;
+  overflow: hidden;
 }
 
 .rank-me span {
