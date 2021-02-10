@@ -13,7 +13,7 @@ module.exports = merge(common, {
   mode: "production",
   output: {
     path: path.resolve(__dirname, "../dist"),
-    filename: "js/[name].bundle.js",
+    filename: "js/[name].bundle.js?v=" + Date.parse(new Date()),
     //The publicPath will be used within our server script as well in order to make sure files are served correctly on http://localhost:3000.
     publicPath: "./" //TODO: packed url can replace by CDN
   },
@@ -52,8 +52,8 @@ module.exports = merge(common, {
     new ExtractCssChunks({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: 'css/[name].css',
-      chunkFilename: 'css/[id].css',
+      filename: 'css/[name].css?v=' + Date.parse(new Date()),
+      chunkFilename: 'css/[id].css?v=' + Date.parse(new Date()),
     }),
     new CleanWebpackPlugin()
   ],
